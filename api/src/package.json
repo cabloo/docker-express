@@ -1,0 +1,6 @@
+{
+  "name": "express-elect-seed",
+  "version": "0.0.1",
+  "description": "ExpressJS API",
+  "main": "index.js"
+}

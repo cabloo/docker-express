@@ -1,0 +1,4 @@
+#!/bin/bash
+
+npm i --unsafe-perm
+su www bash -c "./node_modules/mocha/bin/mocha src/**/*.test.js"
