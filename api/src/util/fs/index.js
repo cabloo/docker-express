@@ -1,28 +1,72 @@
 exports = module.exports = FileSystem;
 exports['@require'] = ['fs', 'q', 'readline'];
-function FileSystem(fs, Q, LineReader) {
-  return {
-    get: get
-  };
+function FileSystem(orig, Q, LineReader) {
+  var fs = {};
+
+  fs.get = get;
+  fs.makeDirectory = makeDirectory;
+  fs.exists = exists;
+
+  return fs;
+
+  function makeDirectory(path) {
+    return fs
+      .get(path)
+      .makeDirectory()
+    ;
+  }
+
+  function exists(path) {
+    return fs
+      .get(path)
+      .exists()
+    ;
+  }
 
   function get(path) {
-    return new File(path, fs, Q, LineReader);
+    return new File(path, orig, Q, LineReader);
   }
 }
 
 function File(path, fs, Q, LineReader) {
-  var me = this;
+  var file = this;
 
-  this.write = write;
-  this.append = append;
-  this.unlink = unlink;
-  this.replace = replace;
-  this.truncate = truncate;
-  this.eachLine = eachLine;
-  this.contents = contents;
-  this.exists = exists;
+  file.write = write;
+  file.exists = exists;
+  file.append = append;
+  file.unlink = unlink;
+  file.replace = replace;
+  file.truncate = truncate;
+  file.eachLine = eachLine;
+  file.contents = contents;
+  file.makeDirectory = makeDirectory;
 
-  return this;
+  return file;
+
+  function makeDirectory() {
+    return file
+      .exists()
+      .then(function (exists) {
+        if (exists) {
+          return file;
+        }
+
+        var deferred = Q.defer();
+
+        fs.mkdir(path, callback);
+
+        return deferred.promise;
+
+        function callback(error) {
+          if (error) {
+            return deferred.reject(error);
+          }
+
+          deferred.resolve(file);
+        }
+      })
+      ;
+  }
 
   function exists() {
     var deferred = Q.defer();
@@ -48,7 +92,7 @@ function File(path, fs, Q, LineReader) {
         return deferred.reject(error);
       }
 
-      deferred.resolve(me);
+      deferred.resolve(file);
     }
   }
 
@@ -60,7 +104,7 @@ function File(path, fs, Q, LineReader) {
         deferred.reject(error);
       }
 
-      deferred.resolve(me);
+      deferred.resolve(file);
     });
 
     return deferred.promise;
@@ -78,15 +122,15 @@ function File(path, fs, Q, LineReader) {
         return deferred.reject(error);
       }
 
-      deferred.resolve(me);
+      deferred.resolve(file);
     }
   }
 
   function replace(search, replace) {
-    return me
+    return file
       .contents()
       .then(function (contents) {
-        return me.write(contents.replace(search, replace));
+        return file.write(contents.replace(search, replace));
       })
     ;
   }
@@ -116,7 +160,7 @@ function File(path, fs, Q, LineReader) {
         return deferred.reject(error);
       }
 
-      deferred.resolve(me);
+      deferred.resolve(file);
     }
   }
 
@@ -135,7 +179,7 @@ function File(path, fs, Q, LineReader) {
     return deferred.promise;
 
     function handleEnd() {
-      deferred.resolve(me);
+      deferred.resolve(file);
     }
   }
 }
