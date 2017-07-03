@@ -13,13 +13,44 @@ function FileSystem(fs, Q, LineReader) {
 function File(path, fs, Q, LineReader) {
   var me = this;
 
+  this.write = write;
   this.append = append;
   this.unlink = unlink;
+  this.replace = replace;
   this.truncate = truncate;
   this.eachLine = eachLine;
   this.contents = contents;
+  this.exists = exists;
 
   return this;
+
+  function exists() {
+    var deferred = Q.defer();
+
+    fs.access(path, fs.constants.F_OK, callback);
+
+    return deferred.promise;
+
+    function callback(error) {
+      deferred.resolve(!error);
+    }
+  }
+
+  function write(contents) {
+    var deferred = Q.defer();
+
+    fs.writeFile(path, contents, callback);
+
+    return deferred.promise;
+
+    function callback(error) {
+      if (error) {
+        return deferred.reject(error);
+      }
+
+      deferred.resolve(me);
+    }
+  }
 
   function unlink() {
     var deferred = Q.defer();
@@ -51,6 +82,14 @@ function File(path, fs, Q, LineReader) {
     }
   }
 
+  function replace(search, replace) {
+    return me
+      .contents()
+      .then(function (contents) {
+        return me.write(contents.replace(search, replace));
+      })
+    ;
+  }
   function contents() {
     var deferred = Q.defer();
 
