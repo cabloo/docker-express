@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/docker-express.iml" filepath="$PROJECT_DIR$/.idea/docker-express.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/SynergyCP - Docker - Express.iml" filepath="$PROJECT_DIR$/.idea/SynergyCP - Docker - Express.iml" />
     </modules>
   </component>
 </project>

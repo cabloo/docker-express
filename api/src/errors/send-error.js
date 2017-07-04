@@ -10,6 +10,6 @@ function sendErrorFactory(app, Error) {
       return res.error(''+error);
     }
 
-    res.error(error.message, error.data, error.code);
+    res.error(error.message, error.data, error.code, error.stack);
   }
 }

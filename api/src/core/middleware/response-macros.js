@@ -19,20 +19,21 @@ function responseMacrosFactory() {
       ]);
     }
 
-    function error(message, data, code) {
+    function error(message, data, code, stack) {
       code = parseInt(code) || 400;
 
       res.api(data, code, [
         new Message('error', message)
-      ]);
+      ], stack);
     }
 
-    function api(data, code, messages, error) {
+    function api(data, code, messages, errorStack) {
       res.status(code).json({
         code: parseInt(code) || 200,
         data: data || null,
-        error: error || false,
-        messages: messages || []
+        error: !!errorStack,
+        messages: messages || [],
+        stack: errorStack,
       });
     }
   }
