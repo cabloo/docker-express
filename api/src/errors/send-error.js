@@ -7,7 +7,7 @@ function sendErrorFactory(app, Error) {
   function sendError(error, req, res, next) {
     // TODO: error instanceof Error
     if (!error.message || !error.code) {
-      return res.error(''+error);
+      return res.error(''+error, null, 400, error.stack);
     }
 
     res.error(error.message, error.data, error.code, error.stack);
