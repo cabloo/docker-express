@@ -1,3 +1,3 @@
 # docker-express
 
-Example Usage: https://github.com/synergycp/bm-docker-rtg
+For Usage, see the seed app: https://github.com/synergycp/docker-express-seed
