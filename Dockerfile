@@ -1,7 +1,8 @@
 FROM synergycp/deb-8-supervised
 
-RUN apt-get install -y curl && \
-    curl -sL https://deb.nodesource.com/setup_6.x | bash && \
+RUN apt-get update && \
+    apt-get install -y curl && \
+    curl -sL https://deb.nodesource.com/setup_10.x | bash && \
     apt-get install -y nodejs build-essential && \
     useradd www
 
