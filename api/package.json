@@ -6,7 +6,7 @@
   "scripts": {
     "postinstall": "if [ ! -d node_modules/src ]; then ln -s ../src node_modules/; fi",
     "test": "./bin/test.sh",
-    "start": "nodejs ./src/server.js | bistre",
+    "start": "node ./src/server.js | bistre",
     "watch": "nodemon ./src/server.js | bistre"
   },
   "repository": {
